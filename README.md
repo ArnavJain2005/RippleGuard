@@ -1,6 +1,6 @@
-# Abuse-Ring Sentinel
+# RippleGuard
 
-> **Defense-only payment abuse detection using temporal behavioral signals and causal 24-hour graph context.**
+> **AI-Powered Financial Risk Intelligence**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ## Product Experience
 
-Abuse-Ring Sentinel is structured as an **AI-assisted payment risk investigation workspace**. Rather than operating as an autonomous blocking engine or a generic metric dashboard, it guides analysts through a structured, evidence-grounded risk decision workflow.
+RippleGuard is structured as an **AI-assisted payment risk investigation workspace**. Rather than operating as an autonomous blocking engine or a generic metric dashboard, it guides analysts through a structured, evidence-grounded risk decision workflow.
 
 ### Investigation Showcase
 
@@ -369,7 +369,7 @@ Empirical analysis of XGBoost feature gain reveals the relative contribution of 
 
 ## 10. Safety & Responsible AI Protocol
 
-Abuse-Ring Sentinel is architected strictly as a **defense-only decision support tool**:
+RippleGuard is architected strictly as a **defense-only decision support tool**:
 
 - **No Autonomous Financial Action**: The system does **not** autonomously execute settlement holds, block credit cards, freeze merchant payouts, or terminate user accounts.
 - **Human-in-the-Loop Protocol**: All model predictions are mapped to operational recommendations (`Monitor`, `Analyst Review`, `Escalate for Authorization`). Every financial action requires explicit human authorization.

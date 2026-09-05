@@ -1,5 +1,5 @@
 /* =============================================================================
-   ABUSE-RING SENTINEL — WORKSPACE LOGIC
+   RIPPLEGUARD — WORKSPACE LOGIC
    Implements the behavior contracts in /DESIGN.md:
      §6  motion system + view transitions
      §8  graph visualization rules

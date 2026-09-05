@@ -1,6 +1,6 @@
 {
     "framing": {
-        "title": "Abuse-Ring Sentinel: Temporal Behavioral Risk Detector with 24h Causal Relational Graph",
+        "title": "RippleGuard: Temporal Behavioral Risk Detector with 24h Causal Relational Graph",
         "disclaimer": "Synthetic evaluation; not a production benchmark. This system is defense-only. The model identifies and explains risk; it does not generate attacks. No financial action is executed automatically. Expected cost is evaluated at each model's validation-selected operating point and shows high seed-to-seed variance (cost delta range: -2,300 to +1,930). The more robust scenario-level result is the reduction in seasonal-burst false-positive rate.",
         "core_truth": "Temporal behavioral signals provide the primary detection power, while a causal 24-hour relational graph adds incremental context that is especially useful for distinguishing legitimate burst traffic from coordinated activity."
     },
