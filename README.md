@@ -5,14 +5,47 @@
 RippleGuard is an AI-assisted payment risk investigation workspace that uses temporal behavioral signals and causal 24-hour graph context to detect and explain financial abuse.
 
 ![Dashboard Overview](assets/screenshots/cases_overview.png)
-> RippleGuard''s command dashboard surfaces system-wide risk, active investigations, suspicious activity, and network signals in a single analyst workspace, allowing investigators to move from aggregate risk to individual cases without losing context.
+> RippleGuard's command dashboard surfaces system-wide risk, active investigations, suspicious activity, and network signals in a single analyst workspace, allowing investigators to move from aggregate risk to individual cases without losing context.
 
 ---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [1. The Problem](#1-the-problem)
+- [2. RippleGuard: The Solution](#2-rippleguard-the-solution)
+- [3. How the Product Works](#3-how-the-product-works)
+- [4. Why Temporal + Graph Intelligence](#4-why-temporal--graph-intelligence)
+- [5. Product Experience](#5-product-experience)
+- [6. Curated Case Studies](#6-curated-case-studies)
+- [7. Synthetic Data Generation & Audit Scope](#7-synthetic-data-generation--audit-scope)
+- [8. Temporal Leakage Controls](#8-temporal-leakage-controls)
+- [9. Experiment Ladder & Model Methodology](#9-experiment-ladder--model-methodology)
+- [10. Validated Results](#10-validated-results)
+- [11. Multi-Seed Sensitivity Audit](#11-multi-seed-sensitivity-audit)
+- [12. Feature Importance Attribution](#12-feature-importance-attribution)
+- [13. Safety & Responsible AI Protocol](#13-safety--responsible-ai-protocol)
+- [14. System Architecture](#14-system-architecture)
+- [15. Technology Stack](#15-technology-stack)
+- [16. Setup & Reproduction Commands](#16-setup--reproduction-commands)
+- [17. API Reference](#17-api-reference)
+- [18. Repository Structure](#18-repository-structure)
+
+---
+
+## Overview
 
 ### Context & Operational Posture
 
 | Attribute | Specification |
-| :
+| :--- | :--- |
+| **Track** | Razorpay AI Risk Manager |
+| **Repository** | [https://github.com/Dr-Dre420/RippleGuard](https://github.com/Dr-Dre420/RippleGuard) |
+| **System Classification** | Defense-Only Risk Intelligence (Human-in-the-Loop) |
+| **Operational Principle** | Temporal behavior detects suspicious activity; causal relational context evaluates coordination. |
+| **Safety Invariant** | **No financial action is executed automatically.** All defensive outputs require human analyst authorization. |
+| **Evaluation Scope** | Synthetic Evaluation (N = 14,801 held-out test set); not a production benchmark. |
+| **Methodology Status** | Frozen, reproducible, and multi-seed verified. |
 
 ---
 
@@ -23,24 +56,20 @@ Modern payment fraud presents two conflicting failure modes in transaction-level
 1. **Distributed Syndicate Attacks**: Organized fraud syndicates split volume across dozens of synthetic customer identities, rotating virtual cards and devices to keep single-account velocity deceptively low.
 2. **Flash Sale False Positive Spikes**: High-velocity promotional campaigns and festive flash sales cause benign organic buyers to mimic abusive velocity surges. Unaugmented tabular models trigger aggressive false declines, inflicting severe merchant friction and lost revenue.
 
----
-
 ## 2. RippleGuard: The Solution
 
-RippleGuard is architected as a **defense-only decision support tool** to solve these failure modes. 
+RippleGuard is architected as a **defense-only decision support tool** to solve these failure modes.
 
 **The Core Thesis:**
 - **Temporal behavioral velocity detects the surge** (~81% feature gain from 1-hour merchant velocity).
 - **Causal 24-hour relational graph context determines coordination** (distinguishing concentrated infrastructure reuse from dispersed organic purchasing).
 - **Human review remains the final authority** (no automated account termination, card cancellation, or settlement blocking).
 
----
-
 ## 3. How the Product Works
 
 The analyst investigation follows a deterministic, evidence-grounded sequence:
 
-`	ext
+```text
 Cases Overview
       │
       ▼
@@ -66,15 +95,13 @@ Record Analyst Disposition (Log human authorization into local session audit tra
       │
       ▼
 Optionally Inspect Model Evaluation (Audit PR curves, seed sensitivity & cost trade-offs)
-`
-
----
+```
 
 ## 4. Why Temporal + Graph Intelligence
 
 RippleGuard incorporates an interactive **3D Causal Ego-Network** rendered via WebGL:
 
-`	ext
+```text
            [ Shared Device D851 ]
                   /      \
                  /        \
@@ -82,11 +109,11 @@ RippleGuard incorporates an interactive **3D Causal Ego-Network** rendered via W
                  \
                   \
            [ Merchant M0 ]
-`
+```
 
 ### Technical Design & Capabilities
 
-- **Zero-Lookahead Construction**: Graph state strictly represents transactions recorded in the causal pre-event window $[t - 24\text{h}, t)$ prior to transaction arrival at timestamp $. Subsequent transactions are mathematically excluded.
+- **Zero-Lookahead Construction**: Graph state strictly represents transactions recorded in the causal pre-event window [t−24h, t) prior to transaction arrival at timestamp *t*. Subsequent transactions are mathematically excluded.
 - **Bipartite Entity Graph**: Projects customers, merchants, physical devices, and payment instruments as distinct 3D nodes connected by directed transaction and usage edges.
 - **Interactive Controls**: Full 3D spatial rotation, smooth perspective scaling, auto-fit, and focal centering.
 
@@ -101,12 +128,12 @@ RippleGuard guides analysts through a structured, evidence-grounded risk decisio
 ### Investigation Workspace
 
 ![Investigation Workspace](assets/screenshots/case_a_investigation.png)
-> **Investigation Workspace**: The investigation workspace brings together the selected entity''s risk score, behavioral evidence, connected entities, suspicious activity, and recommended actions so analysts can move from detection to investigation without switching contexts.
+> **Investigation Workspace**: The investigation workspace brings together the selected entity's risk score, behavioral evidence, connected entities, suspicious activity, and recommended actions so analysts can move from detection to investigation without switching contexts.
 
 ### Graph Intelligence
 
 ![Interactive Graph](assets/screenshots/3d_causal_ego_network.png)
-> **Interactive Graph Investigation**: RippleGuard''s interactive network view exposes relationships between customers, merchants, devices, and payment instruments, helping analysts identify connected patterns that transaction-level analysis alone can miss.
+> **Interactive Graph Investigation**: RippleGuard's interactive network view exposes relationships between customers, merchants, devices, and payment instruments, helping analysts identify connected patterns that transaction-level analysis alone can miss.
 
 ### Explainability & Analyst Action
 
@@ -133,10 +160,10 @@ RippleGuard guides analysts through a structured, evidence-grounded risk decisio
 ### Case C (`T60698`) — Seasonal Volume Burst (Model Disagreement)
 - **Telemetry**: ₹4,820.00 festive checkout at merchant `M0`.
 - **Behavioral Signal**: Merchant volume surge trips the temporal velocity baseline.
-- **Model C Decision**: Risk score **`0.2857`** > threshold `0.2383` $\to$ **FLAGGED (False Alarm)**.
+- **Model C Decision**: Risk score **`0.2857`** > threshold `0.2383` → **FLAGGED (False Alarm)**.
 - **Relational Evidence**: Customer interacts across isolated infrastructure (0 shared payment methods, 1 shared device, isolated merchant link).
-- **Model B Decision**: Risk score **`0.1178`** < threshold `0.1519` $\to$ **CLEARED (Legitimate)**.
-- **Risk Delta**: **$\Delta = -0.1679$** (`LOWER RISK UNDER RELATIONAL CONTEXT`).
+- **Model B Decision**: Risk score **`0.1178`** < threshold `0.1519` → **CLEARED (Legitimate)**.
+- **Risk Delta**: **Δ = −0.1679** (`LOWER RISK UNDER RELATIONAL CONTEXT`).
 - **Analyst Action**: **Monitor** (allows transaction to complete normally; prevents false decline).
 
 ### Case B (`T59899`) — Collusive Merchant Ring
@@ -167,24 +194,20 @@ To evaluate network hypotheses under rigorous, controlled conditions, a multi-sc
 
 > **Synthetic Evaluation Disclosure**: This project is evaluated on synthetic data and is not a production benchmark. Real-world payment networks exhibit residential proxy rotations, missing telemetry, and complex behavioral noise not fully present in synthetic generators.
 
----
-
 ## 8. Temporal Leakage Controls
 
 To ensure strict scientific integrity, all feature extraction incorporates zero-lookahead temporal controls:
 
-- **Pre-Event State Commitment**: For any transaction at timestamp $t$, causal graph features are computed from the historical graph state **strictly before** the transaction's edges are committed. Customer degree and neighborhood reach reflect only prior events.
-- **Incremental FIFO Sliding Window**: Edges outside the sliding $[t - 24\text{h}, t)$ window are automatically evicted from memory via a FIFO queue (`collections.deque`).
+- **Pre-Event State Commitment**: For any transaction at timestamp *t*, causal graph features are computed from the historical graph state **strictly before** the transaction's edges are committed. Customer degree and neighborhood reach reflect only prior events.
+- **Incremental FIFO Sliding Window**: Edges outside the sliding [t−24h, t) window are automatically evicted from memory via a FIFO queue (`collections.deque`).
 - **Deterministic Timestamp Tie-Breaking**: Transactions arriving at identical second timestamps are sequenced deterministically by arrival order, replicating an event-streaming message bus.
 - **Zero Future Contamination**: Rolling behavioral states and graph windows do not leak from test to train. Verified by automated regression tests in `tests/test_graph.py`.
-
----
 
 ## 9. Experiment Ladder & Model Methodology
 
 The project evaluates four benchmark tiers to isolate incremental signal value:
 
-1. **Model 0 (Naive Heuristic Floor)**: Non-ML rule (`merchant_velocity_1h >= 2.0`) selected on the validation set to minimize expected cost under $\text{Recall} \ge 0.80$.
+1. **Model 0 (Naive Heuristic Floor)**: Non-ML rule (`merchant_velocity_1h >= 2.0`) selected on the validation set to minimize expected cost under Recall ≥ 0.80.
 2. **Model A (Linear Baseline Floor)**: Balanced Logistic Regression on temporal features, assessing linear separability.
 3. **Model C (Temporal XGBoost Control)**: Gradient boosted trees (`max_depth=4`, `learning_rate=0.1`) trained exclusively on temporal behavioral features.
 4. **Model B (Temporal + Graph XGBoost)**: Identical architecture and hyperparameters as Model C, augmented with 5 causal 24-hour relational graph features:
@@ -196,7 +219,7 @@ The project evaluates four benchmark tiers to isolate incremental signal value:
 
 > **Controlled Graph Experiment**: The isolated experiment is **Model C vs. Model B**. Both share identical training splits, temporal features, and XGBoost hyperparameters. Model 0 and Model A provide benchmark reference floors.
 
-Operating thresholds are selected **strictly on the validation set** to minimize operational cost under $\text{Recall} \ge 0.80$, then frozen for evaluation on the held-out test set ($N = 14,801$).
+Operating thresholds are selected **strictly on the validation set** to minimize operational cost under Recall ≥ 0.80, then frozen for evaluation on the held-out test set (N = 14,801).
 
 ---
 
@@ -204,28 +227,71 @@ Operating thresholds are selected **strictly on the validation set** to minimize
 
 ### Controlled Benchmark: Model C vs. Model B (3-Seed Mean)
 
-Across the 3-seed evaluation audit on the held-out test set ($N = 14,801$):
+Across the 3-seed evaluation audit on the held-out test set (N = 14,801):
 
-| Evaluation Metric | Model 0 (Naive Floor) | Model A (LR Floor) | Model C (Temporal Control) | Model B (Temporal + Graph) | Delta ($\text{C} \to \text{B}$) | Operational Implication |
-| :
+| Evaluation Metric | Model 0 (Naive Floor) | Model A (LR Floor) | Model C (Temporal Control) | Model B (Temporal + Graph) | Delta (C → B) | Operational Implication |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **PR-AUC (Mean)** | 0.9460\* | 0.9587\* | **0.9550** | **0.9568** | **+0.0018** | Modest aggregate ranking improvement |
+| **Precision (Mean)** | 53.34%\* | 48.35%\* | **65.08%** | **68.65%** | **+3.57%** | Higher precision on flagged accounts |
+| **Recall (Mean)** | 96.06%\* | 96.88%\* | **95.32%** | **95.15%** | **−0.17%** | Comparable high coverage on abuse |
+| **F1 Score (Mean)** | 0.6859\* | 0.6451\* | **0.7731** | **0.7972** | **+0.0241** | Improved precision/recall balance |
+| **FPR (Mean)** | 6.68%\* | 8.22%\* | **6.47%** | **5.59%** | **−0.88%** | Overall suppression of false positive noise |
+| **Expected Cost** | 30,660\* | 28,280\* | **32,017** | **31,810** | **−207** | High seed variance (−2,300 to +1,930) |
 
----
+*\*Model 0 and Model A reflect deterministic single-seed baseline floors on the held-out test set.*
+
+### Key Scenario Finding: Seasonal-Burst False-Positive Reduction
+
+Cost model assumption: C_FP = $10 (analyst verification & merchant friction), C_FN = $500 (chargeback loss and liability).
+
+- **Seasonal Burst (`seasonal_burst`)**:
+  - **Model C (Temporal Only)**: 29.17% False Positive Rate (291.7 false declines per 1,000 transactions).
+  - **Model B (Temporal + Graph)**: **14.03% False Positive Rate** (140.3 false declines per 1,000 transactions).
+  - **Outcome**: **51.9% relative reduction in seasonal-burst false-positive rate across the three evaluation seeds**.
+- **Ambient Traffic (`background`)**: Model C: 4.67% FPR vs. Model B: 4.91% FPR (+0.24% marginal noise trade-off).
+- **Coordinated Burst Detection**: Model C: 97.78% Recall vs. Model B: 97.63% Recall.
+- **Merchant Ring Detection**: Model C: 94.32% Recall vs. Model B: 94.11% Recall.
+
+### Critical Scientific Disclosures
+
+1. **Seed-Sensitive Cost Variance**: The mean expected-cost difference of **−207** is **not** a robust headline metric. Across random seeds, cost deltas range from **−2,300** (Seed 42) to **+1,930** (Seed 999) due to operating threshold sensitivity around dense decision boundaries.
+2. **Consistent Observed Benefit**: The most repeatable, validated benefit of graph context is the reduction in false positives during seasonal burst activity (51.9% relative reduction).
+3. **Modest Aggregate Lift**: Graph context provides modest aggregate PR-AUC lift (+0.0018). Graph features act as an incremental relational filter, not a replacement for temporal detection.
 
 ## 11. Multi-Seed Sensitivity Audit
 
 To verify stability, identical pipelines were executed across three distinct random seeds:
 
 | Seed | Model C PR-AUC | Model B PR-AUC | PR-AUC Delta | Precision Delta | Expected Cost Delta |
-| :
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **Seed 42** | 0.9526 | 0.9581 | **+0.0055** | **+0.0313** | **−2,300** |
+| **Seed 100** | 0.9565 | 0.9598 | **+0.0032** | **+0.0152** | **−250** |
+| **Seed 999** | 0.9559 | 0.9526 | **−0.0033** | **+0.0730** | **+1,930** |
+| **Mean** | **0.9550** | **0.9568** | **+0.0018** | **+0.0357** | **−207** |
 
----
+*Scientific Integrity Note*: Seed 999 demonstrates transparent reporting. In Seed 999, graph PR-AUC dipped slightly (−0.0033) while precision gained +7.30%. Across all seeds, the reduction in seasonal false positives remains consistent.
 
 ## 12. Feature Importance Attribution
 
 Empirical analysis of XGBoost feature gain reveals the relative contribution of each signal family:
 
 | Feature Name | Signal Type | XGBoost Gain Share | Role in Detection |
-| :
+| :--- | :--- | :---: | :--- |
+| `merchant_velocity_1h` | Temporal | **80.95%** | **Primary Detection Signal**: Captures high-frequency acceleration. |
+| `burst_score` | Temporal | 4.62% | Measures deviation from customer historical baseline. |
+| `time_since_last_txn` | Temporal | 2.62% | Inter-arrival cadence telemetry. |
+| `local_cluster_density_24h` | Relational Graph | 2.04% | Relational context: Bipartite neighborhood density. |
+| `amount_ratio_vs_customer` | Temporal | 1.99% | Relative transaction sizing. |
+| `two_hop_customer_count_24h` | Relational Graph | 1.86% | Relational reachability across shared nodes. |
+| `txn_count_1h` | Temporal | 1.66% | Hourly transaction count. |
+| `shared_pm_customers_24h` | Relational Graph | 1.43% | Relational context: Cross-account card reuse. |
+| `customer_degree_24h` | Relational Graph | 1.18% | Secondary contextual signal: Total entities linked within 24h. |
+| `shared_device_customers_24h` | Relational Graph | 1.13% | Physical hardware recycling across accounts. |
+| `txn_count_5m` | Temporal | 0.46% | Short-window burst count. |
+| `unique_merchants_1h` | Temporal | 0.08% | Merchant diversity in recent window. |
+| `new_device_24h` | Temporal | 0.00% | Binary new-device indicator (no gain in this dataset). |
+
+> **Attribution Summary**: Temporal behavioral features dominate prediction (~81% from 1-hour merchant velocity). Graph context acts as an **incremental relational layer (~7.6% combined contribution)** rather than the primary detector.
 
 ---
 
@@ -242,7 +308,7 @@ RippleGuard is architected strictly as a **defense-only decision support tool**:
 
 ## 14. System Architecture
 
-```
+```text
                                Live Transaction Request [t]
                                            │
                    ┌───────────────────────┴───────────────────────┐
@@ -281,13 +347,11 @@ RippleGuard is architected strictly as a **defense-only decision support tool**:
                            [ Human Analyst Authorized ]                    [ No Auto-Financial Action ]
 ```
 
----
-
 ## 15. Technology Stack
 
 - **Machine Learning & Analytics**: Python 3.14, XGBoost, Scikit-learn, NetworkX, NumPy, Pandas.
 - **API & Backend Service**: FastAPI, Uvicorn, Pydantic.
-- **Frontend Architecture**: Semantic HTML5, Vanilla CSS (Dark Slate Design System with CSS variables), Vanilla JavaScript (ES6+).
+- **Frontend Architecture**: Semantic HTML5, Vanilla CSS (Deepwater Design System with CSS variables), Vanilla JavaScript (ES6+).
 - **Network Visualization**: 3D WebGL Force-Directed Graph (`3d-force-graph` / Three.js), HTML5 Canvas 2D fallback.
 - **Testing & Verification**: Pytest, AnyIO.
 
@@ -299,8 +363,8 @@ RippleGuard is architected strictly as a **defense-only decision support tool**:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Dr-Dre420/abuse-ring-sentinel.git
-cd abuse-ring-sentinel
+git clone https://github.com/Dr-Dre420/RippleGuard.git
+cd RippleGuard
 
 # 2. Create and activate virtual environment
 python -m venv venv
@@ -332,19 +396,20 @@ Open your browser and navigate to:
 http://localhost:8000
 ```
 
----
-
 ## 17. API Reference
 
 | Endpoint | Method | Description |
-| :
-
----
+| :--- | :--- | :--- |
+| `/health` | `GET` | System health status, version, and model readiness. |
+| `/case/demo/list` | `GET` | Returns curated benchmark cases (Case A, Case B, Case C). |
+| `/case/{txn_id}` | `GET` | Detailed telemetry, dual-model scores, ego-network, and timeline for a transaction. |
+| `/evaluate` | `GET` | Full evaluation payload: aggregate metrics, PR curves, confusion matrices, and seed audits. |
+| `/score/batch` | `POST` | Batch transaction scoring with defensive recommendations. |
 
 ## 18. Repository Structure
 
 ```
-abuse-ring-sentinel/
+RippleGuard/
 ├── README.md                      # Engineering report & submission documentation
 ├── LICENSE                        # All Rights Reserved (Arnav Jain)
 ├── .env.example                   # Environment configuration template
@@ -372,7 +437,7 @@ abuse-ring-sentinel/
 │   ├── train.py                   # Model training & threshold selection
 │   └── static/
 │       ├── index.html             # Risk Investigation Workspace
-│       ├── styles.css             # Dark slate visual design system
+│       ├── styles.css             # Deepwater visual design system
 │       ├── app.js                 # Workspace logic, 3D WebGL & 2D canvas fallback
 │       └── vendor/
 │           └── 3d-force-graph.min.js
@@ -387,7 +452,7 @@ abuse-ring-sentinel/
 
 ## License
 
-Copyright © 2026 Arnav Jain.  
+Copyright © 2026 Arnav Jain.
 All rights reserved.
 
-See [LICENSE](file:///c:/Learning/College/Others/Hackathon/Razorpay/Project/abuse-ring-sentinel/LICENSE) for the full terms.
+See [LICENSE](LICENSE) for the full terms.
