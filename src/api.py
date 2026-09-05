@@ -12,8 +12,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 app = FastAPI(
-    title="Abuse-Ring Sentinel API",
-    description="Defensive payment abuse ring detector: Temporal behavioral signals enhanced by a 24-hour causal relational graph.",
+    title="RippleGuard API",
+    description="AI-powered financial risk intelligence: Temporal behavioral signals enhanced by a 24-hour causal relational graph for abuse ring detection.",
     version="1.0.0"
 )
 
@@ -38,7 +38,7 @@ def health():
     """
     return {
         "status": "healthy",
-        "service": "abuse-ring-sentinel",
+        "service": "rippleguard",
         "version": "1.0.0",
         "defense_only": True,
         "automated_financial_action": False,
@@ -115,4 +115,4 @@ if os.path.exists(STATIC_DIR):
         index_file = os.path.join(STATIC_DIR, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
-        return JSONResponse({"message": "Abuse-Ring Sentinel API active. Static dashboard building in progress."})
+        return JSONResponse({"message": "RippleGuard API active. Static dashboard building in progress."})

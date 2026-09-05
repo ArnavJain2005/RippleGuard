@@ -1,5 +1,5 @@
 // =============================================================================
-// ABUSE-RING SENTINEL — RISK INVESTIGATION WORKSPACE LOGIC
+// RIPPLEGUARD — RISK INVESTIGATION WORKSPACE LOGIC
 // =============================================================================
 
 let currentCaseId = "T57997";
@@ -28,7 +28,7 @@ function switchTab(tabName) {
   if (activeBtn) activeBtn.classList.add('active');
 
   const topbarTitle = document.getElementById('topbar-title');
-  if (topbarTitle) topbarTitle.innerText = TOPBAR_TITLES[tabName] || "Abuse-Ring Sentinel";
+  if (topbarTitle) topbarTitle.innerText = TOPBAR_TITLES[tabName] || "RippleGuard";
 
   // Toggle View Sections
   document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
