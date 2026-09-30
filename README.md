@@ -40,7 +40,7 @@ RippleGuard is an AI-assisted payment risk investigation workspace that uses tem
 | Attribute | Specification |
 | :--- | :--- |
 | **Track** | Razorpay AI Risk Manager |
-| **Repository** | [https://github.com/Dr-Dre420/RippleGuard](https://github.com/Dr-Dre420/RippleGuard) |
+| **Repository** | [https://github.com/ArnavJain2005/RippleGuard](https://github.com/ArnavJain2005/RippleGuard) |
 | **System Classification** | Defense-Only Risk Intelligence (Human-in-the-Loop) |
 | **Operational Principle** | Temporal behavior detects suspicious activity; causal relational context evaluates coordination. |
 | **Safety Invariant** | **No financial action is executed automatically.** All defensive outputs require human analyst authorization. |
@@ -363,7 +363,7 @@ RippleGuard is architected strictly as a **defense-only decision support tool**:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Dr-Dre420/RippleGuard.git
+git clone https://github.com/ArnavJain2005/RippleGuard.git
 cd RippleGuard
 
 # 2. Create and activate virtual environment
